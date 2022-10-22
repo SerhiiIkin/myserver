@@ -1,10 +1,9 @@
 import Router from "express";
-import { sendMyEmail } from "../utils/sendEmail.js";
+import { sendMyEmail } from "../../utils/sendEmail.js";
 
 const route = new Router();
 
-
-route.post("/api/sendemail", async (req, res) => {
+route.post("/sendemail", async (req, res) => {
     const { email, title, text } = req.body;
 
     try {
@@ -23,4 +22,4 @@ route.post("/api/sendemail", async (req, res) => {
     }
 });
 
-export default route
+export default route;

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include("./partials/head") %>
+    <body>
+        <%- include("./partials/navbar") %>
+        <div class="container">
+            <ul class="mt-4 row">
+                <% locals.products.forEach(function(product){ %>
+                <li
+                    class="p-2 list-unstyled d-grid gap-1 col-12 col-sm-6 col-md-4 col-xl-3"
+                >
+                    <div>Title: <%- product.title %></div>
+                    <div>Price: <%- product.price %></div>
+                    <div>Category: <%- product.category %></div>
+                    <div>Description: <%- product.description %></div>
+
+                    <img
+                        height="200"
+                        width="200"
+                        src="<%- product.image %>"
+                        alt="product"
+                    />
+                </li>
+                <% }); %>
+            </ul>
+        </div>
+    </body>
+</html>
