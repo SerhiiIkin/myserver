@@ -19,15 +19,30 @@ export async function createTodo(req, res) {
             });
         }
 
-        const prod = new Todo({
+        const newTodo = new Todo({
             title,
             description,
             isDone,
         });
-        await prod.save();
-        return res.json({ message: "Todo was created" });
+        await newTodo.save();
+        return res.status(200).json({ message: "Todo was created", newTodo });
     } catch (e) {
         res.send({ message: "Server error" });
+    }
+}
+
+export async function deleteTodo(req, res) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: "Not correct request", errors });
+    }
+
+    try {
+        await Todo.findOneAndDelete({ _id: req.params.id });
+
+        return res.status(200).send({ message: "Todo deleted successfully" });
+    } catch (error) {
+        res.status(500).send({ message: "Cant delete Todo" });
     }
 }
 
