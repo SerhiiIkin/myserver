@@ -26,3 +26,10 @@ export function checkDataProduct(req, res, next) {
         check("image", "Not correct image").notEmpty();
     next();
 }
+
+export function checkDataTodo(req, res, next) {
+    check("title", "Not correct title").notEmpty(),
+        check("description", "Not correct description").notEmpty(),
+        check("isDone", "Not correct isDone").isBoolean();
+    next();
+}

@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import bodyParser from "body-parser";
 import apiRouter from "./routes/api/api.routes.js";
-import { home, products, comments } from "./controllers/pages.js";
+import { home, products, comments, todos } from "./controllers/pages.js";
 
 const app = express();
 dotenv.config();
@@ -22,6 +22,7 @@ app.use("/api", apiRouter);
 app.get("/", home);
 app.get("/products", products);
 app.get("/comments", comments);
+app.get("/todos", todos);
 
 async function start() {
     await mongoose.connect(process.env.dbURL);

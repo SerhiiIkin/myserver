@@ -1,5 +1,6 @@
 import Comments from "../models/Comments.js";
 import Product from "../models/Product.js";
+import Todo from "../models/Todo.js";
 
 export  function home(req, res) {
     res.render("index", { title: "My server", active: "main" });
@@ -12,4 +13,9 @@ export  async function products(req, res) {
 export  async function comments(req, res) {
     const comments = await Comments.find({});
     res.render("comments", { title: "Comments", active: "comments", comments });
+}
+
+export async function todos(req, res) {
+    const todos = await Todo.find({});
+    res.render("todos", { title: "Todos", active: "todos", todos });
 }
