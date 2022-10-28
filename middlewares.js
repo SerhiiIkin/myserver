@@ -33,3 +33,10 @@ export function checkDataTodo(req, res, next) {
         check("isDone", "Not correct isDone").isBoolean();
     next();
 }
+export function checkDataTodoUpdate(req, res, next) {
+    check("_id", "Not correct _id").notEmpty(),
+    check("title", "Not correct title").notEmpty(),
+        check("description", "Not correct description").notEmpty(),
+        check("isDone", "Not correct isDone").isBoolean();
+    next();
+}

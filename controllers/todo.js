@@ -64,3 +64,23 @@ export async function getOneTodo(req, res) {
         res.send({ message: "Server error" });
     }
 }
+
+export async function updateTodo(req, res, next) {
+    const { _id, title, description, isDone } = req.body;
+
+    try {
+        const todo = await Todo.findOneAndUpdate(
+            { _id },
+            { title, description, isDone },
+            {
+                returnOriginal: false,
+            }
+        );
+
+        return res
+            .status(200)
+            .json({ message: "Todo updated successfully", todo });
+    } catch (e) {
+        res.status(500).json({ message: "Cant update todo!" });
+    }
+}
