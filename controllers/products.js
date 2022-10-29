@@ -32,7 +32,7 @@ export async function createProduct(req, res) {
             price,
             category,
             description,
-            image: `http://${req.hostname}/${imageName}`,
+            image: `https://${req.hostname}/${imageName}`,
         });
 
         await prod.save();
