@@ -30,7 +30,7 @@ export async function createProduct(req, res) {
             price,
             category,
             description,
-            image: `https://${req.hostname}/uploads/${imageName}`,
+            image: `https://${req.hostname}/${imageName}`,
         });
 
         await prod.save();
@@ -41,9 +41,24 @@ export async function createProduct(req, res) {
     }
 }
 
+export async function deleteProduct(req, res) {
+    try {
+        await Product.findByIdAndRemove({
+            id: req.params.id,
+        });
+        if (!products) {
+            return res.json({ message: "Products not founded" });
+        }
+
+        res.status(200).json({ message: "Product was successfully deleted!" });
+    } catch (error) {
+        res.status(500).json({ message: "Post was not deleted!" });
+    }
+}
+
 export async function getProducts(req, res) {
     try {
-        const products = await Product.find({}).sort("-createdAt");
+        const products = await Product.find({});
 
         if (!products) {
             return res.json({ message: "Products not founded" });
