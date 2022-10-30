@@ -13,8 +13,6 @@ export async function createProduct(req, res) {
         }
         const { title, price, category, description } = req.body;
 
-        console.log(req.host);
-
         let imageName = Date.now().toString() + req.files.image.name;
         const __dirname = dirname(fileURLToPath(import.meta.url));
         req.files.image.mv(path.join(__dirname, "..", "uploads", imageName));
@@ -32,7 +30,7 @@ export async function createProduct(req, res) {
             price,
             category,
             description,
-            image: `https://${req.hostname}/${imageName}`,
+            image: `https://${req.hostname}/uploads/${imageName}`,
         });
 
         await prod.save();
