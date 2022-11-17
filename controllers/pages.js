@@ -1,4 +1,4 @@
-import Comments from "../models/Comments.js";
+import Comments from "../models/Comment.js";
 import Product from "../models/Product.js";
 import Todo from "../models/Todo.js";
 

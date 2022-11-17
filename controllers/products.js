@@ -2,6 +2,7 @@ import { validationResult } from "express-validator";
 import Product from "../models/Product.js";
 import path, { dirname } from "path";
 import { fileURLToPath } from "url";
+import { deleteComment } from "./comments.js";
 
 export async function createProduct(req, res) {
     try {
@@ -30,7 +31,8 @@ export async function createProduct(req, res) {
             price,
             category,
             description,
-            image: `https://${req.hostname}/${imageName}`,
+            image: `http://${req.hostname}:5000/${imageName}`,
+            // image: `https://${req.hostname}/${imageName}`,
         });
 
         await prod.save();
@@ -41,18 +43,55 @@ export async function createProduct(req, res) {
     }
 }
 
+export async function updateProduct(req, res) {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res
+                .status(400)
+                .json({ message: "Not correct request", errors });
+        }
+        const { _id, title, price, category, description } = req.body;
+
+        let imageName = Date.now().toString() + req.files.image.name;
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        req.files.image.mv(path.join(__dirname, "..", "uploads", imageName));
+
+        const product = await Product.findByIdAndUpdate(
+            _id,
+            {
+                title,
+                price,
+                category,
+                description,
+                image: `http://${req.hostname}:5000/${imageName}`,
+            },
+            {
+                returnOriginal: false,
+            }
+        );
+
+        return res.json({ message: "Product was updated!", product });
+    } catch (e) {
+        res.send({ message: "Product was not updated!" });
+    }
+}
+
 export async function deleteProduct(req, res) {
     try {
-        await Product.findByIdAndRemove({
-            id: req.params.id,
+        const products = await Product.findByIdAndDelete({
+            _id: req.params.id,
         });
+
+        deleteComment(req.params.id);
+
         if (!products) {
-            return res.json({ message: "Products not founded" });
+            return res.status(404).json({ message: "Products not founded" });
         }
 
         res.status(200).json({ message: "Product was successfully deleted!" });
     } catch (error) {
-        res.status(500).json({ message: "Post was not deleted!" });
+        res.status(500).json({ message: "Product was not deleted!" });
     }
 }
 
@@ -78,3 +117,4 @@ export async function getOneProduct(req, res) {
         res.send({ message: "Server error" });
     }
 }
+

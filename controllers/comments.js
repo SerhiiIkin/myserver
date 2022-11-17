@@ -1,5 +1,6 @@
-import Comments from "../models/Comments.js";
-import { check, validationResult } from "express-validator";
+import Comment from "../models/Comment.js";
+import Product from "../models/Product.js";
+import { validationResult } from "express-validator";
 
 export async function createComment(req, res) {
     try {
@@ -11,18 +12,23 @@ export async function createComment(req, res) {
         }
         const { postId, username, body, date } = req.body;
 
-        const comment = new Comments({
+        const newComment = new Comment({
             postId,
             username,
             body,
             date,
         });
-        await comment.save();
+
+        await newComment.save();
+
+        await Product.findByIdAndUpdate(postId, {
+            $push: {
+                comments: newComment._id,
+            },
+        });
+
         return res.json({
-            postId,
-            body,
-            date,
-            username,
+            newComment,
             message: "Comments was created",
         });
     } catch (e) {
@@ -30,20 +36,19 @@ export async function createComment(req, res) {
     }
 }
 
-export async function getComments(req, res)  {
-    const comments = await Comments.find({});
+export async function getComments(req, res) {
     try {
+        const comments = await Comment.find({ postId: req.params.id });
+        if (!comments) {
+            return res.status(404).send({ message: "No comments found!" });
+        }
+
         return res.json(comments);
     } catch (e) {
         res.send({ message: "Server error" });
     }
 }
 
-export async function getOneComment(req, res) {
-    const comment = await Comments.findOne({ _id: req.params.id });
-    try {
-        return res.json(comment);
-    } catch (e) {
-        res.send({ message: "Server error" });
-    }
+export async function deleteComment(id) {
+    await Comment.findOneAndRemove({ id });
 }

@@ -1,13 +1,12 @@
 import Router from "express";
 import { checkDataComments } from "../../middlewares.js";
-import { createComment, getComments, getOneComment } from "../../controllers/comments.js";
+import { createComment, getComments } from "../../controllers/comments.js";
 
 const route = new Router();
 
-route.post("/comment", [checkDataComments], createComment);
+route.post("/comment", checkDataComments, createComment);
 
-route.get("/comments", getComments);
+route.get("/comments/:id", getComments);
 
-route.get(`/comment/:id`, getOneComment);
 
 export default route;

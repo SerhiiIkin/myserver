@@ -5,7 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import apiRouter from "./routes/api/api.routes.js";
 import { home, products, comments, todos } from "./controllers/pages.js";
-import fileupload from "express-fileupload"
+import fileupload from "express-fileupload";
 
 const app = express();
 dotenv.config();
@@ -13,10 +13,10 @@ dotenv.config();
 const PORT = process.env.PORT || 6000;
 
 app.use(cors());
-app.use(fileupload())
+app.use(fileupload());
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(express.static("uploads"))
+app.use(express.static("uploads"));
 
 app.set("view engine", "ejs");
 
@@ -29,7 +29,6 @@ app.get("/todos", todos);
 
 async function start() {
     await mongoose.connect(process.env.dbURL);
-    
 
     try {
         app.listen(PORT, () => {
