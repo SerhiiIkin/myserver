@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include("./partials/head") %>
+    <body>
+        <%- include("./partials/navbar") %>
+        <div class="container">
+            <ul class="mt-4 row">
+                <% locals.users.forEach(function(user){ %>
+                <li
+                    class="p-2 list-unstyled d-grid gap-1 col-12 col-sm-6 col-md-4 col-xl-3"
+                >
+                    <div>Name: <%- user.username %></div>
+                    
+                    <div>
+                        Role: <% user.roles.forEach(function(role) { %>
+                        <span> <%- role %> </span>
+                        <% }) %>
+                    </div>
+                </li>
+                <% }); %>
+            </ul>
+        </div>
+    </body>
+</html>
